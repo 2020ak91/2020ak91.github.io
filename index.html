@@ -2,109 +2,88 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 这一行非常重要，确保在手机端也能正常缩放显示 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人主页</title>
+    <title>Personal Portfolio | 练有达</title>
     
-    <!-- 引入 Tailwind CSS 框架（这就是页面变好看的魔法） -->
+    <!-- Dependencies: Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 引入 Font Awesome 图标库，用于显示 GitHub 等图标 -->
+    <!-- Dependencies: Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- 引入好看的英文字体 -->
+    <!-- Dependencies: Google Fonts (Inter) -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-    <!-- 自定义一点小样式 -->
+    <!-- Custom Styles: 扩展 Tailwind 主题或覆盖默认样式 -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            /* 柔和的背景渐变色 */
+            /* 设定全局背景渐变 */
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh; /* 撑满全屏高度 */
+            min-height: 100vh;
         }
     </style>
 </head>
-<body class="flex items-center justify-center">
+<body class="flex items-center justify-center antialiased">
 
-    <!-- 主容器：限制最大宽度，水平居中，内部左右布局（大屏幕左右，小屏幕上下） -->
-    <div class="container mx-auto px-6 max-w-5xl">
+    <!-- Main Layout Container: 控制最大宽度并实现水平居中 -->
+    <main class="container mx-auto px-6 max-w-5xl">
         
-        <!-- 介绍区域卡片（使用白色半透明毛玻璃效果） -->
+        <!-- Hero Section Card: 包含磨砂玻璃效果与响应式 Flex 布局 -->
         <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
             
-            <!-- 左侧：文字介绍区 -->
+            <!-- Left Column: 文本信息与 CTA (Call to Action) -->
             <div class="flex-1 text-center md:text-left">
-                <!-- 小标签 -->
+                <!-- Badge: 欢迎状态标签 -->
                 <span class="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4">
-                    你好，很高兴认识你 👋
+                    Hello World 👋
                 </span>
                 
-                <!-- 你的名字（主标题） -->
-                <!-- ⚠️ 替换为你自己的名字 -->
+                <!-- [TODO: 替换姓名] 主标题: 使用 clip-text 实现文本渐变效果 -->
                 <h1 class="text-5xl font-extrabold text-gray-800 tracking-tight mb-4">
-                    我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">你的名字</span>
+                    我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">练有达</span>
                 </h1>
                 
-                <!-- 个人标语（副标题） -->
-                <!-- ⚠️ 替换为你的专业或一句话介绍 -->
+                <!-- [TODO: 替换专业/方向] 副标题: 字体加粗，突出职业定位 -->
                 <p class="text-xl text-gray-600 mb-6 font-medium">
-                    计算机科学专业学生 / 全栈开发爱好者
+                    上海交通大学 物理学
                 </p>
                 
-                <!-- 详细介绍 -->
-                <!-- ⚠️ 替换为你的真实介绍 -->
+                <!-- [TODO: 替换个人简介] 正文: 限制行高 (leading-relaxed) 提升可读性 -->
                 <p class="text-gray-500 leading-relaxed mb-8">
-                    目前就读于 XXX 大学。我对 Web 开发和人工智能充满热情，喜欢用代码解决实际问题。平时喜欢逛 GitHub，偶尔写写博客。
+                    广东河源人。皇室战争 2v2 名人堂，王者荣耀星耀玩家。
+                </p> <p>
+                    工作经历：<br>
+                    2020 - 2023      广州市铁一中学 教研处 教学助理       导师：张恒主任 <br>
+                    2023 - 2026      广州市铁一中学 教研处 教学助理       导师：颜璜主任
                 </p>
                 
-                <!-- 按钮组 -->
+                <!-- CTA Buttons: 包含 Hover 态过渡动画 (transition-all) -->
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <!-- 核心按钮：查看作品 -->
-                    <a href="#projects" class="px-8 py-3 rounded-full bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700 hover:shadow-blue-500/30 hover:-translate-y-1 transition-all duration-300">
-                        查看我的作品
-                    </a>
-                    
-                    <!-- 次要按钮：下载简历（你可以传个 pdf 到仓库里，把链接填在这） -->
-                    <a href="#" class="px-8 py-3 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 shadow-sm hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300">
+                    <!-- [TODO: 替换简历链接] Secondary Button: 次要操作 -->
+                    <a href="https://mp.weixin.qq.com/s/MayfySsT5ljZ61j7mAb1bg" class="px-8 py-3 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 shadow-sm hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300">
                         <i class="fa-solid fa-download mr-2"></i>下载简历
-                    </a>
-                </div>
-
-                <!-- 社交链接图标 -->
-                <div class="mt-10 flex gap-5 justify-center md:justify-start text-2xl text-gray-400">
-                    <!-- ⚠️ 把 href 里的 # 换成你的真实 GitHub 链接 -->
-                    <a href="#" class="hover:text-gray-900 hover:-translate-y-1 transition-transform duration-300" title="GitHub">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                    <!-- ⚠️ 把 href 里的 # 换成 mailto:你的邮箱 -->
-                    <a href="#" class="hover:text-blue-600 hover:-translate-y-1 transition-transform duration-300" title="Email">
-                        <i class="fa-solid fa-envelope"></i>
-                    </a>
-                    <!-- ⚠️ 如果你有微信或微博，也可以加在这里 -->
-                    <a href="#" class="hover:text-green-500 hover:-translate-y-1 transition-transform duration-300" title="WeChat">
-                        <i class="fa-brands fa-weixin"></i>
                     </a>
                 </div>
             </div>
 
-            <!-- 右侧：头像展示区 -->
+            <!-- Right Column: 视觉元素 (头像) -->
             <div class="flex-1 flex justify-center md:justify-end">
-                <!-- 头像外圈动效 -->
+                <!-- Avatar Wrapper: 相对定位，用于包含背景光晕 -->
                 <div class="relative w-64 h-64 md:w-80 md:h-80">
-                    <!-- 装饰性背景圈 -->
+                    <!-- 背景光晕装饰: 使用 blur 和 pulse 动画 -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-blue-400 to-purple-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
                     
-                    <!-- ⚠️ 真实的头像图片：请把 src 里的链接换成你自己的图片地址。
-                         如果你暂时没有，可以把这张图片传到你的 GitHub 仓库里，然后填相对路径（比如 src="./avatar.jpg"） -->
-                    <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?q=80&w=800&auto=format&fit=crop" 
-                         alt="我的头像" 
+                    <!-- [TODO: 替换头像路径 (建议使用本地相对路径如 ./avatar.jpg)] -->
+                    <!-- Image Element: object-cover 确保图片不变形 -->
+                    <img src="https://mmbiz.qpic.cn/sz_mmbiz_jpg/03GvOicc4HUOC90AQxWJeibFic0Cibt6vCaKp8agDnZctOXO3SuEhcjhm1P6Zdiakwje3ZPibFglp6LmvrOqJ51wicQEjibowjicBvZRMm2icmqfKFDuI/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=10" 
+                         alt="Avatar Profile" 
                          class="relative rounded-full w-full h-full object-cover border-4 border-white shadow-2xl hover:scale-105 transition-transform duration-500">
                 </div>
             </div>
 
         </div>
-    </div>
+    </main>
 
 </body>
 </html>
