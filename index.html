@@ -5,281 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>2020ak91's Blog</title>
 
-  <style>
-    /* ================= 主题变量 ================= */
-    :root {
-      --bg: #ffffff;
-      --bg-soft: #f6f7f9;
-      --text: #1f2328;
-      --text-soft: #656d76;
-      --border: #e5e7eb;
-      --accent: #2563eb;
-      --danger: #dc2626;
-      --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
-      --radius: 12px;
-      --max-width: 1080px;
-    }
-    [data-theme="dark"] {
-      --bg: #0d1117;
-      --bg-soft: #161b22;
-      --text: #e6edf3;
-      --text-soft: #8b949e;
-      --border: #30363d;
-      --accent: #58a6ff;
-      --danger: #f85149;
-      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.4);
-    }
-
-    /* ================= 基础重置 ================= */
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.75;
-      transition: background-color .3s, color .3s;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    img { max-width: 100%; height: auto; display: block; }
-    .hidden { display: none !important; }
-
-    .container {
-      width: 100%;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* ================= 导航 ================= */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: color-mix(in srgb, var(--bg) 85%, transparent);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-    }
-    .logo { font-size: 1.15rem; font-weight: 700; color: var(--text); cursor: pointer; }
-    .logo:hover { color: var(--accent); }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-    .nav-btn {
-      border: none;
-      background: transparent;
-      color: var(--text-soft);
-      font-size: .95rem;
-      padding: 7px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background .2s, color .2s;
-    }
-    .nav-btn:hover { background: var(--bg-soft); color: var(--accent); text-decoration: none; }
-    .theme-toggle {
-      width: 38px; height: 38px; border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-      color: var(--text);
-      font-size: 1rem;
-      cursor: pointer;
-      display: grid;
-      place-items: center;
-      transition: transform .2s, border-color .2s;
-    }
-    .theme-toggle:hover { transform: scale(1.08); border-color: var(--accent); }
-
-    /* ================= 提示条 ================= */
-    .notice {
-      margin: 20px 0 8px;
-      padding: 12px 18px;
-      font-size: .86rem;
-      color: var(--text-soft);
-      background: var(--bg-soft);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-    }
-
-    /* ================= 按钮 ================= */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 20px;
-      border-radius: 999px;
-      font-size: .92rem;
-      font-weight: 500;
-      border: 1px solid var(--border);
-      background: var(--bg-soft);
-      color: var(--text);
-      cursor: pointer;
-      transition: transform .2s, box-shadow .2s, background-color .2s, border-color .2s;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); text-decoration: none; }
-    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .btn-small { padding: 5px 14px; font-size: .82rem; }
-
-    /* ================= 文章列表 ================= */
-    .list-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 28px 0 20px;
-    }
-    .section-title {
-      font-size: 1.2rem;
-      margin: 0;
-      padding-left: 12px;
-      border-left: 4px solid var(--accent);
-      line-height: 1.3;
-    }
-    .post-list { display: flex; flex-direction: column; gap: 18px; padding-bottom: 48px; }
-
-    .post-card {
-      padding: 22px 24px;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      transition: transform .25s, box-shadow .25s, border-color .25s;
-    }
-    .post-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--accent); }
-    .post-meta {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      font-size: .82rem;
-      color: var(--text-soft);
-      margin-bottom: 8px;
-    }
-    .tag {
-      display: inline-block;
-      padding: 1px 10px;
-      border-radius: 999px;
-      background: color-mix(in srgb, var(--accent) 12%, transparent);
-      color: var(--accent);
-      font-size: .76rem;
-      font-weight: 500;
-    }
-    .post-card h3 { margin: 0 0 8px; font-size: 1.15rem; line-height: 1.5; }
-    .post-card p {
-      margin: 0 0 14px;
-      font-size: .92rem;
-      color: var(--text-soft);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .post-actions { display: flex; gap: 10px; }
-
-    .empty {
-      text-align: center;
-      padding: 70px 20px;
-      color: var(--text-soft);
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 48px;
-    }
-    .empty p { margin: 0 0 18px; }
-
-    /* ================= 阅读视图 ================= */
-    .read-article { max-width: 760px; margin: 0 auto; padding: 8px 0 70px; }
-    .read-article h1 {
-      font-size: clamp(1.6rem, 3.6vw, 2.1rem);
-      line-height: 1.35;
-      margin: 20px 0 12px;
-    }
-
-    /* Markdown 正文排版 */
-    .prose { line-height: 1.9; }
-    .prose h1, .prose h2, .prose h3, .prose h4 { margin: 1.8em 0 .6em; line-height: 1.4; }
-    .prose h2 { font-size: 1.4rem; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
-    .prose h3 { font-size: 1.15rem; }
-    .prose p { margin: 1em 0; }
-    .prose ul, .prose ol { padding-left: 1.6em; }
-    .prose li { margin: .3em 0; }
-    .prose code {
-      background: var(--bg-soft);
-      padding: .15em .4em;
-      border-radius: 4px;
-      font-size: .9em;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    .prose pre {
-      background: #0d1117;
-      color: #e6edf3;
-      padding: 16px 18px;
-      border-radius: 8px;
-      overflow-x: auto;
-      line-height: 1.6;
-    }
-    .prose pre code { background: none; padding: 0; color: inherit; font-size: .88em; }
-    .prose blockquote {
-      margin: 1.2em 0;
-      padding: .6em 1.1em;
-      border-left: 4px solid var(--accent);
-      background: var(--bg-soft);
-      color: var(--text-soft);
-      border-radius: 0 8px 8px 0;
-    }
-    .prose blockquote p { margin: .3em 0; }
-    .prose img { border-radius: 8px; margin: 1.2em auto; }
-
-    /* ================= 页脚 / Toast ================= */
-    .site-footer {
-      border-top: 1px solid var(--border);
-      padding: 26px 0;
-      text-align: center;
-      font-size: .85rem;
-      color: var(--text-soft);
-    }
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 32px;
-      transform: translate(-50%, 20px);
-      background: #1f2328;
-      color: #fff;
-      padding: 10px 22px;
-      border-radius: 999px;
-      font-size: .9rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,.25);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .3s, transform .3s, visibility .3s;
-      z-index: 999;
-      max-width: 90vw;
-      text-align: center;
-    }
-    .toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
-
-    @media (max-width: 640px) {
-      .nav-links { gap: 2px; }
-      .nav-btn { padding: 6px 9px; font-size: .86rem; }
-      .post-card { padding: 18px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-    }
-  </style>
+  <!-- ================= 外部资源引入 ================= -->
+  <!-- 1. KaTeX 公式样式与脚本 (必须先引入) -->
+  <link rel="stylesheet" href="./katex/katex.min.css">
+  <script src="./katex/katex.min.js"></script>
+  
+  <!-- 2. 博客全局样式 -->
+  <link rel="stylesheet" href="./style.css">
+  
+  <!-- 3. 独立的 Markdown 渲染引擎 -->
+  <script src="./markdown-parser.js"></script>
 </head>
 
 <body>
@@ -340,291 +75,157 @@
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
+  <!-- ================= 核心业务逻辑 ================= -->
   <script>
-  /* ============================================================
-     0. 内置 Markdown 渲染器（保持不变）
-     ============================================================ */
-  function escapeHtml(str = '') {
-    return String(str).replace(/[&<>"']/g, ch => ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-    }[ch]));
-  }
-
-  function safeUrl(url = '') {
-    const u = String(url).trim();
-    return !/^(javascript|vbscript):/i.test(u);
-  }
-
-  function inline(text = '') {
-    let s = escapeHtml(text);
-    s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
-    s = s.replace(
-      /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)(?:\{(left|center|right|float-left|float-right)\})?/g,
-      (_, alt, url, title, align) => {
-        if (!safeUrl(url)) return alt;
-        const t = title ? ` title="${title}"` : '';
-        const cls = align ? ` class="align-${align}"` : '';
-        return `<img src="${url}" alt="${alt}"${t}${cls}>`;
-      }
-    );
-    s = s.replace(
-      /\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
-      (_, txt, url, title) => {
-        if (!safeUrl(url)) return txt;
-        const t = title ? ` title="${title}"` : '';
-        return `<a href="${url}"${t} target="_blank" rel="noopener">${txt}</a>`;
-      }
-    );
-    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-    s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-    s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
-    s = s.replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
-    s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
-    return s;
-  }
-
-  function renderMarkdown(src = '') {
-    const lines = String(src).replace(/\r\n?/g, '\n').split('\n');
-    const out = [];
-    let i = 0;
-    let listType = null;
-
-    const closeList = () => {
-      if (listType) {
-        out.push(`</${listType}>`);
-        listType = null;
-      }
-    };
-
-    while (i < lines.length) {
-      const line = lines[i];
-      const fenceMatch = line.match(/^\s*(```|~~~)(.*)$/);
-      if (fenceMatch) {
-        closeList();
-        const fence = fenceMatch[1];
-        const lang = fenceMatch[2].trim();
-        const codeLines = [];
-        i++;
-        while (i < lines.length && !lines[i].trim().startsWith(fence)) {
-          codeLines.push(lines[i]);
-          i++;
-        }
-        i++;
-        const cls = lang ? ` class="language-${escapeHtml(lang)}"` : '';
-        out.push(`<pre><code${cls}>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
-        continue;
-      }
-
-      if (line.trim() === '') { closeList(); i++; continue; }
-
-      if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
-        closeList(); out.push('<hr>'); i++; continue;
-      }
-
-      const heading = line.match(/^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/);
-      if (heading) {
-        closeList();
-        const level = heading[1].length;
-        out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
-        i++; continue;
-      }
-
-      if (/^\s{0,3}>/.test(line)) {
-        closeList();
-        const quoteLines = [];
-        while (i < lines.length && /^\s{0,3}>/.test(lines[i])) {
-          quoteLines.push(lines[i].replace(/^\s{0,3}>\s?/, ''));
-          i++;
-        }
-        out.push(`<blockquote>${renderMarkdown(quoteLines.join('\n'))}</blockquote>`);
-        continue;
-      }
-
-      const ul = line.match(/^\s*[-*+]\s+(.*)$/);
-      if (ul) {
-        if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul'; }
-        out.push(`<li>${inline(ul[1])}</li>`);
-        i++; continue;
-      }
-
-      const ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
-      if (ol) {
-        if (listType !== 'ol') { closeList(); out.push('<ol>'); listType = 'ol'; }
-        out.push(`<li>${inline(ol[1])}</li>`);
-        i++; continue;
-      }
-
-      closeList();
-      const para = [line];
-      i++;
-      while (i < lines.length) {
-        const next = lines[i];
-        if (next.trim() === '' || /^\s*(```|~~~|#{1,6}\s|>|[-*+]\s|\d+[.)]\s)/.test(next) || /^\s*([-*_])(\s*\1){2,}\s*$/.test(next)) {
-          break;
-        }
-        para.push(next);
-        i++;
-      }
-      out.push(`<p>${para.map(l => inline(l)).join('<br>')}</p>`);
+    // 保留一个简单的转义函数，用于列表卡片的数据安全
+    function escapeHtml(str = '') {
+      return String(str).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
     }
 
-    closeList();
-    return out.join('\n');
-  }
+    const $  = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-  /* ============================================================
-     1. 通用工具
-     ============================================================ */
-  const $  = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+    let toastTimer = null;
+    function toast(msg) {
+      const el = $('#toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+    }
 
-  let toastTimer = null;
-  function toast(msg) {
-    const el = $('#toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
-  }
+    /* ================= 数据层 ================= */
+    let posts = [];
+    let currentId = null;
 
-  /* ============================================================
-     2. 数据层
-     ============================================================ */
-  let posts = [];
-  let currentId = null;
-
-  async function loadPosts() {
-    try {
-      const res = await fetch('posts.json?t=' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        posts = data;
+    async function loadPosts() {
+      try {
+        const res = await fetch('posts.json?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          posts = data;
+        }
+      } catch (err) {
+        console.warn('读取 posts.json 失败：', err);
+        toast('读取失败：请确保仓库有 posts.json，且通过 http 访问（不要直接双击 html）');
+        posts = [];
       }
-    } catch (err) {
-      console.warn('读取 posts.json 失败：', err);
-      toast('读取失败：请确保仓库有 posts.json，且通过 http 访问（不要直接双击 html）');
-      posts = [];
     }
-  }
 
-  function sortedPosts() {
-    return [...posts].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-  }
-
-  /* ============================================================
-     3. 渲染层
-     ============================================================ */
-  function makeExcerpt(content = '', max = 110) {
-    const text = content
-      .replace(/```[\s\S]*?```/g, ' ')
-      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
-      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
-      .replace(/[#>*_`~\-]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-    return text.length > max ? text.slice(0, max) + '…' : text;
-  }
-
-  function renderList() {
-    const listEl  = $('#postList');
-    const emptyEl = $('#emptyState');
-    listEl.innerHTML = '';
-
-    const items = sortedPosts();
-    if (items.length === 0) {
-      emptyEl.classList.remove('hidden');
-      return;
+    function sortedPosts() {
+      return [...posts].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
     }
-    emptyEl.classList.add('hidden');
 
-    items.forEach(post => {
-      const card = document.createElement('article');
-      card.className = 'post-card';
-      card.innerHTML = `
-        <div class="post-meta">
-          <time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '未标注日期')}</time>
-          ${(post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
-        </div>
-        <h3>${escapeHtml(post.title || '无标题')}</h3>
-        <p>${escapeHtml(makeExcerpt(post.content))}</p>
-        <div class="post-actions">
-          <button class="btn btn-small btn-primary" data-action="read" data-id="${escapeHtml(post.id)}">阅读</button>
-        </div>
-      `;
-      listEl.appendChild(card);
+    /* ================= 渲染层 ================= */
+    function makeExcerpt(content = '', max = 110) {
+      const text = content
+        .replace(/\$\$[\s\S]*?\$\$/g, ' [公式] ')
+        .replace(/\$([^\$\n]+)\$/g, ' [公式] ')
+        .replace(/```[\s\S]*?```/g, ' ')
+        .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+        .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/[#>*_`~\-]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      return text.length > max ? text.slice(0, max) + '…' : text;
+    }
+
+    function renderList() {
+      const listEl  = $('#postList');
+      const emptyEl = $('#emptyState');
+      listEl.innerHTML = '';
+
+      const items = sortedPosts();
+      if (items.length === 0) {
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+      emptyEl.classList.add('hidden');
+
+      items.forEach(post => {
+        const card = document.createElement('article');
+        card.className = 'post-card';
+        card.innerHTML = `
+          <div class="post-meta">
+            <time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '未标注日期')}</time>
+            ${(post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+          </div>
+          <h3>${escapeHtml(post.title || '无标题')}</h3>
+          <p>${escapeHtml(makeExcerpt(post.content))}</p>
+          <div class="post-actions">
+            <button class="btn btn-small btn-primary" data-action="read" data-id="${escapeHtml(post.id)}">阅读</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    function showView(name) {
+      ['list', 'read'].forEach(v => {
+        $('#view-' + v).classList.toggle('hidden', v !== name);
+      });
+      window.scrollTo(0, 0);
+    }
+
+    function openPost(id) {
+      const post = posts.find(p => p.id === id);
+      if (!post) return;
+      currentId = id;
+
+      $('#readTitle').textContent = post.title || '无标题';
+      $('#readMeta').innerHTML =
+        `<time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '')}</time>` +
+        (post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+      
+      // 核心改变：调用外部的 window.BlogMarkdown.render
+      $('#readContent').innerHTML = window.BlogMarkdown.render(post.content || '');
+
+      showView('read');
+    }
+
+    /* ================= 事件绑定 ================= */
+    $('#postList').addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+      const { action, id } = btn.dataset;
+      if (action === 'read') openPost(id);
     });
-  }
 
-  function showView(name) {
-    ['list', 'read'].forEach(v => {
-      $('#view-' + v).classList.toggle('hidden', v !== name);
+    $('#navHome').addEventListener('click', () => showView('list'));
+    $('#navList').addEventListener('click', () => showView('list'));
+
+    $$('.js-back').forEach(btn => {
+      btn.addEventListener('click', () => showView('list'));
     });
-    window.scrollTo(0, 0);
-  }
 
-  function openPost(id) {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
-    currentId = id;
+    /* ================= 主题切换 ================= */
+    const root = document.documentElement;
+    const themeBtn = $('#themeToggle');
 
-    $('#readTitle').textContent = post.title || '无标题';
-    $('#readMeta').innerHTML =
-      `<time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '')}</time>` +
-      (post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
-    $('#readContent').innerHTML = renderMarkdown(post.content || '');
+    function applyTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+    }
 
-    showView('read');
-  }
+    const savedTheme = localStorage.getItem('theme');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(savedTheme || (systemDark ? 'dark' : 'light'));
 
-  /* ============================================================
-     4. 事件绑定
-     ============================================================ */
-  $('#postList').addEventListener('click', (e) => {
-    const btn = e.target.closest('button[data-action]');
-    if (!btn) return;
-    const { action, id } = btn.dataset;
-    if (action === 'read') openPost(id);
-  });
+    themeBtn.addEventListener('click', () => {
+      applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
 
-  $('#navHome').addEventListener('click', () => showView('list'));
-  $('#navList').addEventListener('click', () => showView('list'));
-
-  $$('.js-back').forEach(btn => {
-    btn.addEventListener('click', () => showView('list'));
-  });
-
-  /* ============================================================
-     5. 主题切换
-     ============================================================ */
-  const root = document.documentElement;
-  const themeBtn = $('#themeToggle');
-
-  function applyTheme(theme) {
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
-  }
-
-  const savedTheme = localStorage.getItem('theme');
-  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  applyTheme(savedTheme || (systemDark ? 'dark' : 'light'));
-
-  themeBtn.addEventListener('click', () => {
-    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
-
-  /* ============================================================
-     6. 启动（修复了异步等待逻辑）
-     ============================================================ */
-  (async function init() {
-    $('#year').textContent = new Date().getFullYear();
-    
-    // 必须先等 fetch 完成，再去渲染列表
-    await loadPosts(); 
-    renderList();
-    showView('list');
-  })();
+    /* ================= 启动 ================= */
+    (async function init() {
+      $('#year').textContent = new Date().getFullYear();
+      await loadPosts(); 
+      renderList();
+      showView('list');
+    })();
   </script>
 </body>
 </html>
