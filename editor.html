@@ -3,33 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>写作台 · 博客后台</title>
+  <title>写作台 · 2020ak91's Blog</title>
   <style>
-    /* ... 样式和之前一样，保持不变 ... */
-    :root { --bg: #f6f7f9; --panel-bg: #ffffff; --text: #1f2328; --text-soft: #656d76; --border: #d0d7de; --accent: #2563eb; --accent-hover: #1d4ed8; }
+    :root {
+      --bg: #f6f7f9;
+      --panel-bg: #ffffff;
+      --text: #1f2328;
+      --text-soft: #656d76;
+      --border: #d0d7de;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+    }
     * { box-sizing: border-box; }
-    body { margin: 0; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; background-color: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; gap: 16px; }
+    body {
+      margin: 0; padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background-color: var(--bg); color: var(--text);
+      height: 100vh; display: flex; flex-direction: column; gap: 16px;
+    }
     header { display: flex; justify-content: space-between; align-items: center; }
-    h1 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 16px;}
+    h1 { margin: 0; font-size: 1.2rem; display: flex; align-items: center; gap: 16px; }
     h1 a { font-size: 0.9rem; font-weight: normal; color: var(--accent); text-decoration: none; }
     h1 a:hover { text-decoration: underline; }
+
     .layout { display: flex; gap: 16px; flex: 1; min-height: 0; }
     @media (max-width: 800px) { .layout { flex-direction: column; } }
-    .panel { flex: 1; background: var(--panel-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+
+    .panel {
+      flex: 1; background: var(--panel-bg); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; display: flex; flex-direction: column; overflow-y: auto;
+    }
+
+    /* Tab 切换 */
+    .tabs { display: flex; gap: 8px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+    .tab-btn {
+      background: transparent; border: none; padding: 8px 16px; font-size: 0.95rem;
+      cursor: pointer; color: var(--text-soft); border-radius: 6px; transition: all 0.2s;
+    }
+    .tab-btn.active { background: var(--bg); color: var(--accent); font-weight: 600; }
+    .tab-btn:hover:not(.active) { background: #f0f0f0; }
+
+    .tab-content { display: none; flex-direction: column; gap: 12px; flex: 1; }
+    .tab-content.active { display: flex; }
+
+    /* 表单样式 */
     .form-group { display: flex; flex-direction: column; gap: 4px; }
     label { font-size: 0.85rem; font-weight: 600; color: var(--text-soft); }
-    input, textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-family: inherit; font-size: 0.9rem; outline: none; }
+    input, textarea {
+      width: 100%; padding: 8px 12px; border: 1px solid var(--border);
+      border-radius: 6px; font-family: inherit; font-size: 0.9rem; outline: none;
+    }
     input:focus, textarea:focus { border-color: var(--accent); }
     textarea { resize: vertical; min-height: 150px; flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; line-height: 1.5; }
     .row { display: flex; gap: 12px; }
     .row > * { flex: 1; }
+    .hint { font-size: 0.8rem; color: var(--text-soft); margin-top: -6px; }
+
+    /* 文章管理列表 */
+    .manage-list { display: flex; flex-direction: column; gap: 10px; }
+    .manage-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 16px; border: 1px solid var(--border); border-radius: 6px;
+      background: #fafafa;
+    }
+    .manage-item-info { display: flex; flex-direction: column; gap: 4px; }
+    .manage-item-title { font-weight: 600; font-size: 0.95rem; }
+    .manage-item-meta { font-size: 0.8rem; color: var(--text-soft); }
+
+    /* 按钮样式 */
     .btn-group { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-    button { padding: 8px 16px; border: 1px solid var(--border); background: var(--panel-bg); color: var(--text); border-radius: 6px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+    button {
+      padding: 8px 16px; border: 1px solid var(--border); background: var(--panel-bg);
+      color: var(--text); border-radius: 6px; font-size: 0.9rem; cursor: pointer; transition: all 0.2s;
+    }
     button:hover { background: #f3f4f6; }
     button.primary { background: var(--accent); color: white; border-color: var(--accent); }
     button.primary:hover { background: var(--accent-hover); }
-    pre { margin: 0; padding: 12px; background: #0d1117; color: #e6edf3; border-radius: 6px; overflow: auto; flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.85rem; line-height: 1.5; white-space: pre-wrap; word-break: break-all; }
-    .hint { font-size: 0.8rem; color: var(--text-soft); margin-top: -6px; }
+    button.danger { background: #fee2e2; color: var(--danger); border-color: #fca5a5; padding: 4px 12px; font-size: 0.85rem; }
+    button.danger:hover { background: var(--danger); color: white; border-color: var(--danger); }
+
+    /* 右侧代码区 */
+    pre {
+      margin: 0; padding: 12px; background: #0d1117; color: #e6edf3; border-radius: 6px;
+      overflow: auto; flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.85rem; line-height: 1.5; white-space: pre-wrap; word-break: break-all;
+    }
     .status { font-size: 0.85rem; padding: 4px 8px; border-radius: 4px; }
     .status.success { background: #dcfce7; color: #166534; }
     .status.error { background: #fee2e2; color: #991b1b; }
@@ -49,44 +109,62 @@
   </header>
 
   <div class="layout">
-    <!-- 左侧输入区 -->
+    <!-- 左侧操作区 -->
     <div class="panel">
-      <div class="row">
-        <div class="form-group">
-          <label>标题（留空则自动从正文提取）</label>
-          <input type="text" id="postTitle" placeholder="文章标题">
+      <!-- Tab 切换按钮 -->
+      <div class="tabs">
+        <button class="tab-btn active" data-target="edit">✍️ 写新文章</button>
+        <button class="tab-btn" data-target="manage">📋 管理已有文章 (<span id="countNum">0</span>)</button>
+      </div>
+
+      <!-- 写文章面板 -->
+      <div id="edit-panel" class="tab-content active">
+        <div class="row">
+          <div class="form-group">
+            <label>标题（留空则自动从正文提取）</label>
+            <input type="text" id="postTitle" placeholder="文章标题">
+          </div>
+          <div class="form-group">
+            <label>发布日期</label>
+            <input type="date" id="postDate">
+          </div>
         </div>
         <div class="form-group">
-          <label>发布日期</label>
-          <input type="date" id="postDate">
+          <label>标签（逗号分隔）</label>
+          <input type="text" id="postTags" placeholder="例如：前端, GitHub">
+        </div>
+        <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
+          <label>Markdown 正文</label>
+          <div class="hint">直接粘贴你的 Markdown 文本，工具会自动帮你转义。</div>
+          <textarea id="postContent" placeholder="# 欢迎\n\n这是正文内容..."></textarea>
         </div>
       </div>
-      <div class="form-group">
-        <label>标签（逗号分隔）</label>
-        <input type="text" id="postTags" placeholder="例如：前端, GitHub">
-      </div>
-      <div class="form-group" style="flex: 1; display: flex; flex-direction: column;">
-        <label>Markdown 正文</label>
-        <div class="hint">直接粘贴你的 Markdown 文本，工具会自动帮你转义。</div>
-        <textarea id="postContent" placeholder="# 欢迎\n\n这是正文内容..."></textarea>
+
+      <!-- 管理文章面板 -->
+      <div id="manage-panel" class="tab-content">
+        <div class="hint" style="margin-bottom: 10px;">点击删除后，右侧的 JSON 会立刻更新。复制或下载覆盖即可生效。</div>
+        <div id="manageList" class="manage-list">
+          <!-- 动态渲染列表 -->
+        </div>
       </div>
     </div>
 
     <!-- 右侧输出区 -->
     <div class="panel">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <label>生成的 JSON <span id="modeText" style="color: var(--accent);">(加载中...)</span></label>
+        <label>生成的完整 JSON <span id="modeText" style="color: var(--accent); font-weight: normal; margin-left: 8px;">(包含草稿和旧文章)</span></label>
         <div class="btn-group" style="margin-top: 0;">
           <button class="primary" onclick="downloadJson()">下载覆盖 posts.json</button>
           <button onclick="copyJson()">复制 JSON</button>
         </div>
       </div>
-      <pre><code id="outputJson">// 等待数据...</code></pre>
+      <pre><code id="outputJson">// 等待数据加载...</code></pre>
     </div>
   </div>
 
   <script>
-    let existingPostsArray = null; 
+    let existingPostsArray = []; // 仓库里原有的文章
+    let draftPost = null;        // 正在左侧写的新文章（草稿）
 
     // 初始化日期
     const today = new Date();
@@ -95,81 +173,171 @@
     const dd = String(today.getDate()).padStart(2, '0');
     document.getElementById('postDate').value = `${yyyy}-${mm}-${dd}`;
 
-    // 监听输入
-    ['postTitle', 'postDate', 'postTags', 'postContent'].forEach(id => {
-      document.getElementById(id).addEventListener('input', generateJson);
-    });
-
-    // 自动获取仓库里的 posts.json
-    async function autoLoadPosts() {
-      const statusEl = document.getElementById('loadStatus');
-      try {
-        // 加时间戳防止浏览器缓存
-        const res = await fetch('posts.json?t=' + Date.now());
-        if (!res.ok) throw new Error('文件不存在或网络错误');
-        const data = await res.json();
-        
-        if (Array.isArray(data)) {
-          existingPostsArray = data;
-          statusEl.textContent = `✅ 已自动加载 ${data.length} 篇文章`;
-          statusEl.className = 'status success';
-        } else {
-          throw new Error('posts.json 格式不是数组');
-        }
-      } catch (err) {
-        console.warn('自动加载失败:', err);
-        statusEl.textContent = '⚠️ 自动加载失败，请手动导入';
-        statusEl.className = 'status error';
-      } finally {
-        generateJson();
-      }
-    }
-
+    // 生成固定的草稿 ID
     function genId() {
       return 'post-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6);
     }
+    let currentDraftId = genId();
 
-    function extractTitle(text) {
-      const match = text.match(/^\s*#\s+(.+?)\s*$/m);
-      return match ? match[1].trim() : '未命名文章';
+    // ================= Tab 切换逻辑 =================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target + '-panel').classList.add('active');
+      });
+    });
+
+    // ================= 渲染与更新逻辑 =================
+    function updateJsonOutput() {
+      // 合并逻辑：如果有草稿，放最前面；后面跟旧文章
+      let finalArray = [];
+      if (draftPost && (draftPost.title || draftPost.content)) {
+        finalArray.push(draftPost);
+      }
+      finalArray = finalArray.concat(existingPostsArray);
+
+      // 按日期倒序排（新日期在上）
+      finalArray.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+
+      document.getElementById('outputJson').textContent = JSON.stringify(finalArray, null, 2);
+      document.getElementById('countNum').textContent = existingPostsArray.length;
+      
+      renderManageList();
     }
 
-    function generateJson() {
-      const titleInput = document.getElementById('postTitle').value.trim();
-      const date = document.getElementById('postDate').value;
-      const tagsRaw = document.getElementById('postTags').value.trim();
-      const content = document.getElementById('postContent').value;
+    // 左侧表单输入监听
+    ['postTitle', 'postDate', 'postTags', 'postContent'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        const titleInput = document.getElementById('postTitle').value.trim();
+        const content = document.getElementById('postContent').value;
+        
+        // 自动提取标题
+        let finalTitle = titleInput;
+        if (!finalTitle && content) {
+          const match = content.match(/^\s*#\s+(.+?)\s*$/m);
+          finalTitle = match ? match[1].trim() : '未命名文章';
+        }
 
-      if (!titleInput && !content.trim()) {
-        document.getElementById('outputJson').textContent = '// 在左侧输入内容后，这里会实时生成 JSON...';
+        // 只要输入了东西，就更新草稿
+        if (finalTitle || content.trim()) {
+          draftPost = {
+            id: currentDraftId, // 固定 ID
+            title: finalTitle || '无标题',
+            date: document.getElementById('postDate').value,
+            tags: document.getElementById('postTags').value.trim().split(/[,，\s]+/).filter(Boolean),
+            content: content
+          };
+        } else {
+          draftPost = null; // 清空了就不保留
+        }
+
+        updateJsonOutput();
+      });
+    });
+
+    // 渲染管理列表
+    function renderManageList() {
+      const listEl = document.getElementById('manageList');
+      listEl.innerHTML = '';
+      
+      if (existingPostsArray.length === 0) {
+        listEl.innerHTML = '<div style="text-align:center; color:var(--text-soft); padding: 20px;">暂无已有文章</div>';
         return;
       }
 
-      const tags = tagsRaw ? tagsRaw.split(/[,，\s]+/).filter(Boolean) : [];
-      const title = titleInput || extractTitle(content);
+      // 按日期排序展示
+      const sorted = [...existingPostsArray].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
 
-      const newPost = {
-        id: genId(),
-        title: title,
-        date: date,
-        tags: tags,
-        content: content
-      };
-
-      let finalOutput;
-      if (existingPostsArray) {
-        // 如果有历史数据，合并进去（新文章始终在最前面）
-        const tempArray = [newPost, ...existingPostsArray];
-        finalOutput = tempArray;
-        document.getElementById('modeText').textContent = `(完整数组, 共 ${tempArray.length} 篇)`;
-      } else {
-        finalOutput = newPost;
-        document.getElementById('modeText').textContent = '(单篇对象)';
-      }
-
-      document.getElementById('outputJson').textContent = JSON.stringify(finalOutput, null, 2);
+      sorted.forEach(post => {
+        const item = document.createElement('div');
+        item.className = 'manage-item';
+        item.innerHTML = `
+          <div class="manage-item-info">
+            <div class="manage-item-title">${escapeHtml(post.title || '无标题')}</div>
+            <div class="manage-item-meta">${escapeHtml(post.date || '')} · ID: ${escapeHtml(post.id)}</div>
+          </div>
+          <button class="danger" onclick="deletePost('${escapeHtml(post.id)}')">删除</button>
+        `;
+        listEl.appendChild(item);
+      });
     }
 
+    // 删除文章
+    function deletePost(id) {
+      if (!confirm('确定要删除这篇文章吗？\n删除后右侧的 JSON 会更新，你需要下载覆盖才能最终生效。')) return;
+      
+      existingPostsArray = existingPostsArray.filter(p => p.id !== id);
+      updateJsonOutput();
+      
+      // 如果删除的就是草稿，清空表单
+      if (currentDraftId === id) {
+        document.getElementById('postTitle').value = '';
+        document.getElementById('postContent').value = '';
+        document.getElementById('postTags').value = '';
+        draftPost = null;
+        currentDraftId = genId();
+        updateJsonOutput();
+      }
+    }
+
+    // 简单的转义防注入
+    function escapeHtml(str = '') {
+      return String(str).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    // ================= 加载与导入逻辑 =================
+    async function autoLoadPosts() {
+      const statusEl = document.getElementById('loadStatus');
+      try {
+        const res = await fetch('posts.json?t=' + Date.now());
+        if (!res.ok) throw new Error('文件不存在');
+        const text = await res.text();
+        let data = text.trim() ? JSON.parse(text) : [];
+        
+        if (Array.isArray(data)) {
+          existingPostsArray = data;
+          statusEl.textContent = `✅ 自动加载 ${data.length} 篇文章`;
+          statusEl.className = 'status success';
+        } else throw new Error('格式不是数组');
+      } catch (err) {
+        console.warn(err);
+        statusEl.textContent = '⚠️ 自动加载失败，请手动导入';
+        statusEl.className = 'status error';
+      } finally {
+        updateJsonOutput();
+      }
+    }
+
+    function importJson(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (Array.isArray(data)) {
+            existingPostsArray = data;
+            document.getElementById('loadStatus').textContent = `✅ 手动导入 ${data.length} 篇`;
+            document.getElementById('loadStatus').className = 'status success';
+            updateJsonOutput();
+          } else {
+            alert('导入失败：格式不正确');
+          }
+        } catch (err) {
+          alert('解析失败：不是有效的 JSON');
+        } finally {
+          input.value = '';
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ================= 导出逻辑 =================
     function copyJson() {
       const text = document.getElementById('outputJson').textContent;
       if (text.startsWith('//')) return;
@@ -190,31 +358,7 @@
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    function importJson(input) {
-      const file = input.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = JSON.parse(e.target.result);
-          if (Array.isArray(data)) {
-            existingPostsArray = data;
-            document.getElementById('loadStatus').textContent = `✅ 手动导入 ${data.length} 篇`;
-            document.getElementById('loadStatus').className = 'status success';
-            generateJson();
-          } else {
-            alert('导入失败：格式不正确');
-          }
-        } catch (err) {
-          alert('解析失败：不是有效的 JSON');
-        } finally {
-          input.value = '';
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // 页面加载时自动触发读取
+    // 页面加载时触发
     autoLoadPosts();
   </script>
 </body>
