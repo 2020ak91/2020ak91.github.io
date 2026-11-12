@@ -336,10 +336,7 @@
       <ul class="nav-links">
         <li><button class="nav-btn" id="navList" type="button">首页</button></li>
         <li><button class="nav-btn" id="navAdd" type="button">写文章</button></li>
-        <li>
-          <button class="nav-btn" id="navSync" type="button"
-                  title="从仓库根目录的 posts.json 拉取文章">同步仓库</button>
-        </li>
+        <li><a href="editor.html" target="_blank" class="nav-btn">写作台 ↗</a></li>
         <li>
           <button id="themeToggle" class="theme-toggle" type="button"
                   aria-label="切换深色/浅色主题">🌙</button>
@@ -894,41 +891,7 @@
   });
 
   /* ============================================================
-     6. 从仓库同步
-     ============================================================ */
-  $('#navSync').addEventListener('click', async () => {
-    try {
-      const res = await fetch('posts.json', { cache: 'no-store' });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error('posts.json 格式不正确');
-
-      const map = new Map(posts.map(p => [p.id, p]));
-      data.forEach(item => {
-        if (!item || typeof item !== 'object') return;
-        const id = item.id || genId();
-        map.set(id, {
-          id,
-          title: item.title || '无标题',
-          date: item.date || todayString(),
-          tags: Array.isArray(item.tags) ? item.tags : [],
-          content: item.content || ''
-        });
-      });
-
-      posts = [...map.values()];
-      savePosts();
-      renderList();
-      showView('list');
-      toast(`同步成功，从仓库读取 ${data.length} 篇文章`);
-    } catch (err) {
-      console.warn('同步失败：', err);
-      toast('同步失败：' + err.message + '（需通过 http 访问，且仓库根目录有 posts.json）');
-    }
-  });
-
-  /* ============================================================
-     7. 事件绑定
+     6. 事件绑定
      ============================================================ */
   $('#postList').addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
@@ -951,7 +914,7 @@
   });
 
   /* ============================================================
-     8. 主题切换
+     7. 主题切换
      ============================================================ */
   const root = document.documentElement;
   const themeBtn = $('#themeToggle');
@@ -971,7 +934,7 @@
   });
 
   /* ============================================================
-     9. 启动
+     8. 启动
      ============================================================ */
   $('#year').textContent = new Date().getFullYear();
   loadPosts();
