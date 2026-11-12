@@ -90,7 +90,7 @@
       cursor: pointer;
       transition: background .2s, color .2s;
     }
-    .nav-btn:hover { background: var(--bg-soft); color: var(--accent); }
+    .nav-btn:hover { background: var(--bg-soft); color: var(--accent); text-decoration: none; }
     .theme-toggle {
       width: 38px; height: 38px; border-radius: 50%;
       border: 1px solid var(--border);
@@ -132,10 +132,7 @@
     }
     .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); text-decoration: none; }
     .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-    .btn-ghost { background: var(--bg-soft); color: var(--text); }
     .btn-small { padding: 5px 14px; font-size: .82rem; }
-    .btn-danger { background: transparent; border-color: var(--border); color: var(--danger); }
-    .btn-danger:hover { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 8%, transparent); }
 
     /* ================= 文章列表 ================= */
     .list-head {
@@ -153,7 +150,6 @@
       border-left: 4px solid var(--accent);
       line-height: 1.3;
     }
-    .list-tools { display: flex; gap: 8px; flex-wrap: wrap; }
     .post-list { display: flex; flex-direction: column; gap: 18px; padding-bottom: 48px; }
 
     .post-card {
@@ -247,47 +243,6 @@
     .prose blockquote p { margin: .3em 0; }
     .prose img { border-radius: 8px; margin: 1.2em auto; }
 
-    /* ================= 写文章 ================= */
-    .card {
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px 24px;
-      margin-bottom: 20px;
-    }
-    .card h3 { margin: 0 0 10px; font-size: 1.02rem; }
-    .hint { margin: 0 0 14px; font-size: .86rem; color: var(--text-soft); }
-    .hint code {
-      background: var(--bg);
-      padding: .1em .4em;
-      border-radius: 4px;
-      font-size: .92em;
-    }
-
-    input[type="text"], textarea, input[type="file"] {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      font-size: .94rem;
-      font-family: inherit;
-      outline: none;
-      transition: border-color .2s;
-    }
-    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
-    textarea {
-      resize: vertical;
-      min-height: 220px;
-      line-height: 1.7;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: .9rem;
-    }
-    #addForm label { display: block; margin: 16px 0 6px; font-size: .88rem; color: var(--text-soft); }
-    #addForm label:first-of-type { margin-top: 0; }
-    #addForm button[type="submit"] { margin-top: 20px; }
-
     /* ================= 页脚 / Toast ================= */
     .site-footer {
       border-top: 1px solid var(--border);
@@ -332,10 +287,9 @@
   <!-- ================= 顶部导航 ================= -->
   <header class="site-header">
     <nav class="nav container">
-      <span class="logo" id="navHome">小明的小站</span>
+      <span class="logo" id="navHome">2020ak91's Blog</span>
       <ul class="nav-links">
         <li><button class="nav-btn" id="navList" type="button">首页</button></li>
-        <li><button class="nav-btn" id="navAdd" type="button">写文章</button></li>
         <li><a href="editor.html" target="_blank" class="nav-btn">写作台 ↗</a></li>
         <li>
           <button id="themeToggle" class="theme-toggle" type="button"
@@ -348,28 +302,21 @@
   <main class="container">
 
     <div class="notice">
-      📌 文章保存在<b>本浏览器</b>（localStorage）。要发布给所有人看，请点「导出备份」得到
-      <code>posts.json</code>，再连同 <code>.md</code> 文件一起提交到你的 GitHub 仓库。
+      📌 本站文章通过纯静态读取仓库中的 <code>posts.json</code> 加载。如需发布新文章，请前往“写作台”。
     </div>
 
     <!-- ================= 视图一：文章列表 ================= -->
     <section id="view-list">
       <div class="list-head">
         <h2 class="section-title">全部文章</h2>
-        <div class="list-tools">
-          <button class="btn btn-small btn-ghost" id="exportBtn" type="button">导出备份</button>
-          <label class="btn btn-small btn-ghost">
-            导入备份
-            <input type="file" id="importBackup" accept=".json,application/json" hidden>
-          </label>
-        </div>
       </div>
 
       <div id="postList" class="post-list"></div>
 
+      <!-- 空状态 -->
       <div id="emptyState" class="empty hidden">
         <p>还没有文章，开始写第一篇吧。</p>
-        <button class="btn btn-primary" id="emptyAddBtn" type="button">写文章</button>
+        <a href="editor.html" target="_blank" class="btn btn-primary" style="text-decoration: none;">前往写作台 ↗</a>
       </div>
     </section>
 
@@ -383,43 +330,11 @@
       </article>
     </section>
 
-    <!-- ================= 视图三：写文章 ================= -->
-    <section id="view-add" class="hidden">
-      <button class="btn btn-small btn-ghost js-back" type="button">← 返回列表</button>
-      <h2 class="section-title" style="margin: 22px 0 20px;">写一篇新文章</h2>
-
-      <div class="card">
-        <h3>方式一：上传 Markdown / TXT 文件</h3>
-        <p class="hint">
-          支持 <code>.md</code>、<code>.markdown</code>、<code>.txt</code>，可一次选多个。
-          文件第一行如果是 <code># 标题</code>，会自动作为文章标题；否则用文件名。
-        </p>
-        <input type="file" id="fileInput" multiple
-               accept=".md,.markdown,.txt,text/markdown,text/plain">
-      </div>
-
-      <div class="card">
-        <h3>方式二：直接粘贴或手写（支持 Markdown）</h3>
-        <form id="addForm">
-          <label for="inputTitle">标题（留空则自动从正文第一行 <code># 标题</code> 提取）</label>
-          <input type="text" id="inputTitle" placeholder="文章标题">
-
-          <label for="inputTags">标签（用逗号或空格分隔，可留空）</label>
-          <input type="text" id="inputTags" placeholder="例如：JavaScript, 随笔">
-
-          <label for="inputContent">正文</label>
-          <textarea id="inputContent" placeholder="# 标题&#10;&#10;正文内容，支持 Markdown 语法..."></textarea>
-
-          <button type="submit" class="btn btn-primary">发布文章</button>
-        </form>
-      </div>
-    </section>
-
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>© <span id="year"></span> 小明的小站 · 用 HTML + JavaScript 手工打造</p>
+      <p>© <span id="year"></span> 2020ak91's Blog </p>
     </div>
   </footer>
 
@@ -427,34 +342,22 @@
 
   <script>
   /* ============================================================
-     0. 内置 Markdown 渲染器（零依赖，不会因网络失败）
-     支持：ATX 标题、粗体、斜体、删除线、行内代码、围栏代码块、
-           链接、图片、无序/有序列表、引用、水平线、段落、换行
-     不支持：表格、任务列表、脚注等 GFM 扩展语法
+     0. 内置 Markdown 渲染器（保持不变）
      ============================================================ */
-
-  // 转义 HTML 特殊字符，避免 XSS
   function escapeHtml(str = '') {
     return String(str).replace(/[&<>"']/g, ch => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[ch]));
   }
 
-  // 只拦截会执行脚本的协议，其余（http/https/相对路径/data 图片）全部放行
   function safeUrl(url = '') {
     const u = String(url).trim();
     return !/^(javascript|vbscript):/i.test(u);
   }
 
-  // 行内元素解析（输入是原始文本，内部先转义再生成 HTML）
   function inline(text = '') {
-    // 1) 先整体转义，后续生成的都是安全 HTML
     let s = escapeHtml(text);
-
-    // 2) 行内代码：先处理，避免内部内容被其他规则误伤
     s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
-
-    // 3) 图片 ![alt](url "title"){align}：支持在括号后追加 {left}、{center}、{right} 或 {float-left} 等标记
     s = s.replace(
       /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)(?:\{(left|center|right|float-left|float-right)\})?/g,
       (_, alt, url, title, align) => {
@@ -464,8 +367,6 @@
         return `<img src="${url}" alt="${alt}"${t}${cls}>`;
       }
     );
-
-    // 4) 链接 [text](url "title")
     s = s.replace(
       /\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
       (_, txt, url, title) => {
@@ -474,27 +375,19 @@
         return `<a href="${url}"${t} target="_blank" rel="noopener">${txt}</a>`;
       }
     );
-
-    // 5) 粗体 **text** / __text__
     s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
     s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
-
-    // 6) 斜体 *text* / _text_（排除 ** 和 __ 的情况）
     s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
     s = s.replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
-
-    // 7) 删除线 ~~text~~
     s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
-
     return s;
   }
 
-  // 块级元素解析：逐行状态机
   function renderMarkdown(src = '') {
     const lines = String(src).replace(/\r\n?/g, '\n').split('\n');
     const out = [];
     let i = 0;
-    let listType = null; // 'ul' | 'ol' | null，用于判断列表是否连续
+    let listType = null;
 
     const closeList = () => {
       if (listType) {
@@ -505,8 +398,6 @@
 
     while (i < lines.length) {
       const line = lines[i];
-
-      // 围栏代码块 ``` 或 ~~~
       const fenceMatch = line.match(/^\s*(```|~~~)(.*)$/);
       if (fenceMatch) {
         closeList();
@@ -514,43 +405,30 @@
         const lang = fenceMatch[2].trim();
         const codeLines = [];
         i++;
-        // 一直读到同种围栏结束
         while (i < lines.length && !lines[i].trim().startsWith(fence)) {
           codeLines.push(lines[i]);
           i++;
         }
-        i++; // 跳过结束围栏
+        i++;
         const cls = lang ? ` class="language-${escapeHtml(lang)}"` : '';
         out.push(`<pre><code${cls}>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
         continue;
       }
 
-      // 空行
-      if (line.trim() === '') {
-        closeList();
-        i++;
-        continue;
-      }
+      if (line.trim() === '') { closeList(); i++; continue; }
 
-      // 水平线 --- / *** / ___
       if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
-        closeList();
-        out.push('<hr>');
-        i++;
-        continue;
+        closeList(); out.push('<hr>'); i++; continue;
       }
 
-      // ATX 标题 # ~ ######
       const heading = line.match(/^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/);
       if (heading) {
         closeList();
         const level = heading[1].length;
         out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
-        i++;
-        continue;
+        i++; continue;
       }
 
-      // 引用：合并连续的 > 行，递归解析内部内容
       if (/^\s{0,3}>/.test(line)) {
         closeList();
         const quoteLines = [];
@@ -562,48 +440,31 @@
         continue;
       }
 
-      // 无序列表 - * +
       const ul = line.match(/^\s*[-*+]\s+(.*)$/);
       if (ul) {
-        if (listType !== 'ul') {
-          closeList();
-          out.push('<ul>');
-          listType = 'ul';
-        }
+        if (listType !== 'ul') { closeList(); out.push('<ul>'); listType = 'ul'; }
         out.push(`<li>${inline(ul[1])}</li>`);
-        i++;
-        continue;
+        i++; continue;
       }
 
-      // 有序列表 1. 1)
       const ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
       if (ol) {
-        if (listType !== 'ol') {
-          closeList();
-          out.push('<ol>');
-          listType = 'ol';
-        }
+        if (listType !== 'ol') { closeList(); out.push('<ol>'); listType = 'ol'; }
         out.push(`<li>${inline(ol[1])}</li>`);
-        i++;
-        continue;
+        i++; continue;
       }
 
-      // 普通段落：把连续的普通行合成一个 <p>，行与行之间用 <br>
       closeList();
       const para = [line];
       i++;
       while (i < lines.length) {
         const next = lines[i];
-        // 遇到空行或任何块级语法就停止
-        if (next.trim() === '' ||
-            /^\s*(```|~~~|#{1,6}\s|>|[-*+]\s|\d+[.)]\s)/.test(next) ||
-            /^\s*([-*_])(\s*\1){2,}\s*$/.test(next)) {
+        if (next.trim() === '' || /^\s*(```|~~~|#{1,6}\s|>|[-*+]\s|\d+[.)]\s)/.test(next) || /^\s*([-*_])(\s*\1){2,}\s*$/.test(next)) {
           break;
         }
         para.push(next);
         i++;
       }
-      // 每行单独解析再拼接，避免 <br> 被 escapeHtml 转义
       out.push(`<p>${para.map(l => inline(l)).join('<br>')}</p>`);
     }
 
@@ -617,16 +478,6 @@
   const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 
-  function genId() {
-    return 'p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
-  }
-
-  function todayString() {
-    const d = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-  }
-
   let toastTimer = null;
   function toast(msg) {
     const el = $('#toast');
@@ -639,13 +490,11 @@
   /* ============================================================
      2. 数据层
      ============================================================ */
-
   let posts = [];
   let currentId = null;
 
   async function loadPosts() {
     try {
-      // 加 ?t=时间戳 防止浏览器缓存旧的 json
       const res = await fetch('posts.json?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
@@ -654,7 +503,6 @@
       }
     } catch (err) {
       console.warn('读取 posts.json 失败：', err);
-      // 如果是直接双击打开的，会走到这里
       toast('读取失败：请确保仓库有 posts.json，且通过 http 访问（不要直接双击 html）');
       posts = [];
     }
@@ -702,7 +550,6 @@
         <p>${escapeHtml(makeExcerpt(post.content))}</p>
         <div class="post-actions">
           <button class="btn btn-small btn-primary" data-action="read" data-id="${escapeHtml(post.id)}">阅读</button>
-          <button class="btn btn-small btn-danger" data-action="delete" data-id="${escapeHtml(post.id)}">删除</button>
         </div>
       `;
       listEl.appendChild(card);
@@ -710,7 +557,7 @@
   }
 
   function showView(name) {
-    ['list', 'read', 'add'].forEach(v => {
+    ['list', 'read'].forEach(v => {
       $('#view-' + v).classList.toggle('hidden', v !== name);
     });
     window.scrollTo(0, 0);
@@ -725,196 +572,30 @@
     $('#readMeta').innerHTML =
       `<time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '')}</time>` +
       (post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
-    // 使用内置渲染器，不依赖任何 CDN
     $('#readContent').innerHTML = renderMarkdown(post.content || '');
 
     showView('read');
   }
 
-  function deletePost(id) {
-    const post = posts.find(p => p.id === id);
-    if (!post) return;
-    if (!confirm(`确定删除《${post.title || '无标题'}》吗？删除后无法恢复。`)) return;
-
-    posts = posts.filter(p => p.id !== id);
-    savePosts();
-    renderList();
-
-    if (currentId === id) {
-      currentId = null;
-      showView('list');
-    }
-    toast('已删除');
-  }
-
   /* ============================================================
-     4. 添加文章
-     ============================================================ */
-  function extractTitle(text = '', filename = '') {
-    const m = text.match(/^\s*#\s+(.+?)\s*$/m);
-    if (m) return m[1].trim();
-    const base = (filename || '').replace(/^.*[\\/]/, '');
-    return base.replace(/\.(md|markdown|txt)$/i, '') || '未命名文章';
-  }
-
-  function addPost({ title, tags, content, filename }) {
-    const post = {
-      id: genId(),
-      title: title || extractTitle(content, filename),
-      date: todayString(),
-      tags: tags || [],
-      content: content || ''
-    };
-    posts.push(post);
-    return post;
-  }
-
-  function readFileAsText(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result || ''));
-      reader.onerror = () => reject(reader.error);
-      reader.readAsText(file, 'utf-8');
-    });
-  }
-
-  $('#fileInput').addEventListener('change', async (e) => {
-    const files = [...e.target.files];
-    if (files.length === 0) return;
-
-    let success = 0;
-    for (const file of files) {
-      try {
-        const text = await readFileAsText(file);
-        if (!text.trim()) {
-          toast(`《${file.name}》是空文件，已跳过`);
-          continue;
-        }
-        addPost({ content: text, filename: file.name });
-        success++;
-      } catch (err) {
-        console.error(err);
-        toast(`读取《${file.name}》失败`);
-      }
-    }
-
-    e.target.value = '';
-    if (success > 0) {
-      savePosts();
-      renderList();
-      showView('list');
-      toast(`已添加 ${success} 篇文章`);
-    }
-  });
-
-  $('#addForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    const title   = $('#inputTitle').value.trim();
-    const tagsRaw = $('#inputTags').value.trim();
-    const content = $('#inputContent').value;
-
-    if (!content.trim()) {
-      toast('正文不能为空');
-      return;
-    }
-
-    const tags = tagsRaw ? tagsRaw.split(/[,，\s]+/).filter(Boolean) : [];
-
-    addPost({ title, tags, content });
-    savePosts();
-    renderList();
-    showView('list');
-    e.target.reset();
-    toast('已发布');
-  });
-
-  /* ============================================================
-     5. 导入 / 导出
-     ============================================================ */
-  function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  $('#exportBtn').addEventListener('click', () => {
-    if (posts.length === 0) {
-      toast('没有文章可导出');
-      return;
-    }
-    const blob = new Blob([JSON.stringify(posts, null, 2)], {
-      type: 'application/json;charset=utf-8'
-    });
-    downloadBlob(blob, 'posts.json');
-    toast('已导出 posts.json');
-  });
-
-  $('#importBackup').addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const text = await readFileAsText(file);
-      const data = JSON.parse(text);
-      if (!Array.isArray(data)) throw new Error('文件内容不是文章数组');
-
-      const map = new Map(posts.map(p => [p.id, p]));
-      let added = 0;
-      data.forEach(item => {
-        if (!item || typeof item !== 'object') return;
-        const post = {
-          id: item.id || genId(),
-          title: item.title || '无标题',
-          date: item.date || todayString(),
-          tags: Array.isArray(item.tags) ? item.tags : [],
-          content: item.content || ''
-        };
-        if (!map.has(post.id)) added++;
-        map.set(post.id, post);
-      });
-
-      posts = [...map.values()];
-      savePosts();
-      renderList();
-      toast(`导入完成：新增 ${added} 篇，共 ${posts.length} 篇`);
-    } catch (err) {
-      console.error(err);
-      toast('导入失败：' + err.message);
-    } finally {
-      e.target.value = '';
-    }
-  });
-
-  /* ============================================================
-     6. 事件绑定
+     4. 事件绑定
      ============================================================ */
   $('#postList').addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;
     const { action, id } = btn.dataset;
-    if (action === 'read')   openPost(id);
-    if (action === 'delete') deletePost(id);
+    if (action === 'read') openPost(id);
   });
 
   $('#navHome').addEventListener('click', () => showView('list'));
   $('#navList').addEventListener('click', () => showView('list'));
-  $('#navAdd').addEventListener('click',  () => {
-    showView('add');
-    $('#inputTitle').focus();
-  });
-  $('#emptyAddBtn').addEventListener('click', () => showView('add'));
 
   $$('.js-back').forEach(btn => {
     btn.addEventListener('click', () => showView('list'));
   });
 
   /* ============================================================
-     7. 主题切换
+     5. 主题切换
      ============================================================ */
   const root = document.documentElement;
   const themeBtn = $('#themeToggle');
@@ -934,12 +615,16 @@
   });
 
   /* ============================================================
-     8. 启动
+     6. 启动（修复了异步等待逻辑）
      ============================================================ */
-  $('#year').textContent = new Date().getFullYear();
-  loadPosts();
-  renderList();
-  showView('list');
+  (async function init() {
+    $('#year').textContent = new Date().getFullYear();
+    
+    // 必须先等 fetch 完成，再去渲染列表
+    await loadPosts(); 
+    renderList();
+    showView('list');
+  })();
   </script>
 </body>
 </html>
