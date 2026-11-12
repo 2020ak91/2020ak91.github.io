@@ -1,91 +1,982 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Portfolio | 练有达</title>
-    
-    <!-- Dependencies: Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Dependencies: Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Dependencies: Google Fonts (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2020ak91's Blog</title>
 
-    <!-- Custom Styles: 扩展 Tailwind 主题或覆盖默认样式 -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            /* 设定全局背景渐变 */
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-    </style>
+  <style>
+    /* ================= 主题变量 ================= */
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f6f7f9;
+      --text: #1f2328;
+      --text-soft: #656d76;
+      --border: #e5e7eb;
+      --accent: #2563eb;
+      --danger: #dc2626;
+      --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+      --radius: 12px;
+      --max-width: 1080px;
+    }
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --text: #e6edf3;
+      --text-soft: #8b949e;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --danger: #f85149;
+      --shadow: 0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.4);
+    }
+
+    /* ================= 基础重置 ================= */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      transition: background-color .3s, color .3s;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    img { max-width: 100%; height: auto; display: block; }
+    .hidden { display: none !important; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* ================= 导航 ================= */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo { font-size: 1.15rem; font-weight: 700; color: var(--text); cursor: pointer; }
+    .logo:hover { color: var(--accent); }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-soft);
+      font-size: .95rem;
+      padding: 7px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .nav-btn:hover { background: var(--bg-soft); color: var(--accent); }
+    .theme-toggle {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--text);
+      font-size: 1rem;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .2s, border-color .2s;
+    }
+    .theme-toggle:hover { transform: scale(1.08); border-color: var(--accent); }
+
+    /* ================= 提示条 ================= */
+    .notice {
+      margin: 20px 0 8px;
+      padding: 12px 18px;
+      font-size: .86rem;
+      color: var(--text-soft);
+      background: var(--bg-soft);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+    }
+
+    /* ================= 按钮 ================= */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border-radius: 999px;
+      font-size: .92rem;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      background: var(--bg-soft);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, background-color .2s, border-color .2s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow); text-decoration: none; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-ghost { background: var(--bg-soft); color: var(--text); }
+    .btn-small { padding: 5px 14px; font-size: .82rem; }
+    .btn-danger { background: transparent; border-color: var(--border); color: var(--danger); }
+    .btn-danger:hover { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 8%, transparent); }
+
+    /* ================= 文章列表 ================= */
+    .list-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 28px 0 20px;
+    }
+    .section-title {
+      font-size: 1.2rem;
+      margin: 0;
+      padding-left: 12px;
+      border-left: 4px solid var(--accent);
+      line-height: 1.3;
+    }
+    .list-tools { display: flex; gap: 8px; flex-wrap: wrap; }
+    .post-list { display: flex; flex-direction: column; gap: 18px; padding-bottom: 48px; }
+
+    .post-card {
+      padding: 22px 24px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+    .post-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); border-color: var(--accent); }
+    .post-meta {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: .82rem;
+      color: var(--text-soft);
+      margin-bottom: 8px;
+    }
+    .tag {
+      display: inline-block;
+      padding: 1px 10px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      color: var(--accent);
+      font-size: .76rem;
+      font-weight: 500;
+    }
+    .post-card h3 { margin: 0 0 8px; font-size: 1.15rem; line-height: 1.5; }
+    .post-card p {
+      margin: 0 0 14px;
+      font-size: .92rem;
+      color: var(--text-soft);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .post-actions { display: flex; gap: 10px; }
+
+    .empty {
+      text-align: center;
+      padding: 70px 20px;
+      color: var(--text-soft);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 48px;
+    }
+    .empty p { margin: 0 0 18px; }
+
+    /* ================= 阅读视图 ================= */
+    .read-article { max-width: 760px; margin: 0 auto; padding: 8px 0 70px; }
+    .read-article h1 {
+      font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+      line-height: 1.35;
+      margin: 20px 0 12px;
+    }
+
+    /* Markdown 正文排版 */
+    .prose { line-height: 1.9; }
+    .prose h1, .prose h2, .prose h3, .prose h4 { margin: 1.8em 0 .6em; line-height: 1.4; }
+    .prose h2 { font-size: 1.4rem; padding-bottom: .3em; border-bottom: 1px solid var(--border); }
+    .prose h3 { font-size: 1.15rem; }
+    .prose p { margin: 1em 0; }
+    .prose ul, .prose ol { padding-left: 1.6em; }
+    .prose li { margin: .3em 0; }
+    .prose code {
+      background: var(--bg-soft);
+      padding: .15em .4em;
+      border-radius: 4px;
+      font-size: .9em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .prose pre {
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 16px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.6;
+    }
+    .prose pre code { background: none; padding: 0; color: inherit; font-size: .88em; }
+    .prose blockquote {
+      margin: 1.2em 0;
+      padding: .6em 1.1em;
+      border-left: 4px solid var(--accent);
+      background: var(--bg-soft);
+      color: var(--text-soft);
+      border-radius: 0 8px 8px 0;
+    }
+    .prose blockquote p { margin: .3em 0; }
+    .prose img { border-radius: 8px; margin: 1.2em auto; }
+
+    /* ================= 写文章 ================= */
+    .card {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 20px;
+    }
+    .card h3 { margin: 0 0 10px; font-size: 1.02rem; }
+    .hint { margin: 0 0 14px; font-size: .86rem; color: var(--text-soft); }
+    .hint code {
+      background: var(--bg);
+      padding: .1em .4em;
+      border-radius: 4px;
+      font-size: .92em;
+    }
+
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: .94rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+    }
+    input[type="text"]:focus, textarea:focus { border-color: var(--accent); }
+    textarea {
+      resize: vertical;
+      min-height: 220px;
+      line-height: 1.7;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .9rem;
+    }
+    #addForm label { display: block; margin: 16px 0 6px; font-size: .88rem; color: var(--text-soft); }
+    #addForm label:first-of-type { margin-top: 0; }
+    #addForm button[type="submit"] { margin-top: 20px; }
+
+    /* ================= 页脚 / Toast ================= */
+    .site-footer {
+      border-top: 1px solid var(--border);
+      padding: 26px 0;
+      text-align: center;
+      font-size: .85rem;
+      color: var(--text-soft);
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 32px;
+      transform: translate(-50%, 20px);
+      background: #1f2328;
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: .9rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s, transform .3s, visibility .3s;
+      z-index: 999;
+      max-width: 90vw;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+    @media (max-width: 640px) {
+      .nav-links { gap: 2px; }
+      .nav-btn { padding: 6px 9px; font-size: .86rem; }
+      .post-card { padding: 18px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center antialiased">
 
-    <!-- Main Layout Container: 控制最大宽度并实现水平居中 -->
-    <main class="container mx-auto px-6 max-w-5xl">
-        
-        <!-- Hero Section Card: 包含磨砂玻璃效果与响应式 Flex 布局 -->
-        <div class="bg-white/80 backdrop-blur-lg rounded-3xl shadow-xl overflow-hidden p-8 md:p-12 flex flex-col md:flex-row items-center gap-10">
-            
-            <!-- Left Column: 文本信息与 CTA (Call to Action) -->
-            <div class="flex-1 text-center md:text-left">
-                <!-- Badge: 欢迎状态标签 -->
-                <span class="inline-block py-1 px-3 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold mb-4">
-                    Hello World 👋
-                </span>
-                
-                <!-- [TODO: 替换姓名] 主标题: 使用 clip-text 实现文本渐变效果 -->
-                <h1 class="text-5xl font-extrabold text-gray-800 tracking-tight mb-4">
-                    我是 <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">练有达</span>
-                </h1>
-                
-                <!-- [TODO: 替换专业/方向] 副标题: 字体加粗，突出职业定位 -->
-                <p class="text-xl text-gray-600 mb-6 font-medium">
-                    上海交通大学 物理学
-                </p>
-                
-                <!-- [TODO: 替换个人简介] 正文: 限制行高 (leading-relaxed) 提升可读性 -->
-                <p class="text-gray-500 leading-relaxed mb-8">
-                    广东河源人。<br>
-                    中考 743 分，高考 667 分。皇室战争 2v2 名人堂，王者荣耀星耀玩家。<br>
-                    不戴眼镜。
-                </p> <p>
-                    工作经历：<br>
-                    2020 - 2023&nbsp;&nbsp;&nbsp;广州市铁一中学 教研处 教学助理&nbsp;&nbsp;&nbsp;导师：张恒 主任 <br>
-                    2023 - 2026&nbsp;&nbsp;&nbsp;广州市铁一中学 教研处 教学助理&nbsp;&nbsp;&nbsp;导师：颜璜 主任
-                </p>
-                
-                <!-- CTA Buttons: 包含 Hover 态过渡动画 (transition-all) -->
-                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <!-- [TODO: 替换简历链接] Secondary Button: 次要操作 -->
-                    <a href="https://mp.weixin.qq.com/s/MayfySsT5ljZ61j7mAb1bg" class="px-8 py-3 rounded-full bg-white text-gray-700 font-semibold border border-gray-200 shadow-sm hover:bg-gray-50 hover:-translate-y-1 transition-all duration-300">
-                        <i class="fa-solid fa-download mr-2"></i>下载简历
-                    </a>
-                </div>
-            </div>
+<body>
 
-            <!-- Right Column: 视觉元素 (头像) -->
-            <div class="flex-1 flex justify-center md:justify-end">
-                <!-- Avatar Wrapper: 相对定位，用于包含背景光晕 -->
-                <div class="relative w-64 h-64 md:w-80 md:h-80">
-                    <!-- 背景光晕装饰: 使用 blur 和 pulse 动画 -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-blue-400 to-purple-400 rounded-full blur-2xl opacity-30 animate-pulse"></div>
-                    
-                    <!-- [TODO: 替换头像路径 (建议使用本地相对路径如 ./avatar.jpg)] -->
-                    <!-- Image Element: object-cover 确保图片不变形 -->
-                    <img src="./Lian Youda.jpg" 
-                         alt="Avatar Profile" 
-                         class="relative rounded-full w-full h-full object-cover border-4 border-white shadow-2xl hover:scale-105 transition-transform duration-500">
-                </div>
-            </div>
+  <!-- ================= 顶部导航 ================= -->
+  <header class="site-header">
+    <nav class="nav container">
+      <span class="logo" id="navHome">小明的小站</span>
+      <ul class="nav-links">
+        <li><button class="nav-btn" id="navList" type="button">首页</button></li>
+        <li><button class="nav-btn" id="navAdd" type="button">写文章</button></li>
+        <li>
+          <button class="nav-btn" id="navSync" type="button"
+                  title="从仓库根目录的 posts.json 拉取文章">同步仓库</button>
+        </li>
+        <li>
+          <button id="themeToggle" class="theme-toggle" type="button"
+                  aria-label="切换深色/浅色主题">🌙</button>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
+  <main class="container">
+
+    <div class="notice">
+      📌 文章保存在<b>本浏览器</b>（localStorage）。要发布给所有人看，请点「导出备份」得到
+      <code>posts.json</code>，再连同 <code>.md</code> 文件一起提交到你的 GitHub 仓库。
+    </div>
+
+    <!-- ================= 视图一：文章列表 ================= -->
+    <section id="view-list">
+      <div class="list-head">
+        <h2 class="section-title">全部文章</h2>
+        <div class="list-tools">
+          <button class="btn btn-small btn-ghost" id="exportBtn" type="button">导出备份</button>
+          <label class="btn btn-small btn-ghost">
+            导入备份
+            <input type="file" id="importBackup" accept=".json,application/json" hidden>
+          </label>
         </div>
-    </main>
+      </div>
 
+      <div id="postList" class="post-list"></div>
+
+      <div id="emptyState" class="empty hidden">
+        <p>还没有文章，开始写第一篇吧。</p>
+        <button class="btn btn-primary" id="emptyAddBtn" type="button">写文章</button>
+      </div>
+    </section>
+
+    <!-- ================= 视图二：阅读文章 ================= -->
+    <section id="view-read" class="hidden">
+      <button class="btn btn-small btn-ghost js-back" type="button">← 返回列表</button>
+      <article class="read-article">
+        <h1 id="readTitle"></h1>
+        <div id="readMeta" class="post-meta"></div>
+        <div id="readContent" class="prose"></div>
+      </article>
+    </section>
+
+    <!-- ================= 视图三：写文章 ================= -->
+    <section id="view-add" class="hidden">
+      <button class="btn btn-small btn-ghost js-back" type="button">← 返回列表</button>
+      <h2 class="section-title" style="margin: 22px 0 20px;">写一篇新文章</h2>
+
+      <div class="card">
+        <h3>方式一：上传 Markdown / TXT 文件</h3>
+        <p class="hint">
+          支持 <code>.md</code>、<code>.markdown</code>、<code>.txt</code>，可一次选多个。
+          文件第一行如果是 <code># 标题</code>，会自动作为文章标题；否则用文件名。
+        </p>
+        <input type="file" id="fileInput" multiple
+               accept=".md,.markdown,.txt,text/markdown,text/plain">
+      </div>
+
+      <div class="card">
+        <h3>方式二：直接粘贴或手写（支持 Markdown）</h3>
+        <form id="addForm">
+          <label for="inputTitle">标题（留空则自动从正文第一行 <code># 标题</code> 提取）</label>
+          <input type="text" id="inputTitle" placeholder="文章标题">
+
+          <label for="inputTags">标签（用逗号或空格分隔，可留空）</label>
+          <input type="text" id="inputTags" placeholder="例如：JavaScript, 随笔">
+
+          <label for="inputContent">正文</label>
+          <textarea id="inputContent" placeholder="# 标题&#10;&#10;正文内容，支持 Markdown 语法..."></textarea>
+
+          <button type="submit" class="btn btn-primary">发布文章</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year"></span> 小明的小站 · 用 HTML + JavaScript 手工打造</p>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  /* ============================================================
+     0. 内置 Markdown 渲染器（零依赖，不会因网络失败）
+     支持：ATX 标题、粗体、斜体、删除线、行内代码、围栏代码块、
+           链接、图片、无序/有序列表、引用、水平线、段落、换行
+     不支持：表格、任务列表、脚注等 GFM 扩展语法
+     ============================================================ */
+
+  // 转义 HTML 特殊字符，避免 XSS
+  function escapeHtml(str = '') {
+    return String(str).replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+  }
+
+  // 只拦截会执行脚本的协议，其余（http/https/相对路径/data 图片）全部放行
+  function safeUrl(url = '') {
+    const u = String(url).trim();
+    return !/^(javascript|vbscript):/i.test(u);
+  }
+
+  // 行内元素解析（输入是原始文本，内部先转义再生成 HTML）
+  function inline(text = '') {
+    // 1) 先整体转义，后续生成的都是安全 HTML
+    let s = escapeHtml(text);
+
+    // 2) 行内代码：先处理，避免内部内容被其他规则误伤
+    s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
+
+    // 3) 图片 ![alt](url "title"){align}：支持在括号后追加 {left}、{center}、{right} 或 {float-left} 等标记
+    s = s.replace(
+      /!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)(?:\{(left|center|right|float-left|float-right)\})?/g,
+      (_, alt, url, title, align) => {
+        if (!safeUrl(url)) return alt;
+        const t = title ? ` title="${title}"` : '';
+        const cls = align ? ` class="align-${align}"` : '';
+        return `<img src="${url}" alt="${alt}"${t}${cls}>`;
+      }
+    );
+
+    // 4) 链接 [text](url "title")
+    s = s.replace(
+      /\[([^\]]+)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)/g,
+      (_, txt, url, title) => {
+        if (!safeUrl(url)) return txt;
+        const t = title ? ` title="${title}"` : '';
+        return `<a href="${url}"${t} target="_blank" rel="noopener">${txt}</a>`;
+      }
+    );
+
+    // 5) 粗体 **text** / __text__
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+
+    // 6) 斜体 *text* / _text_（排除 ** 和 __ 的情况）
+    s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+    s = s.replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
+
+    // 7) 删除线 ~~text~~
+    s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
+
+    return s;
+  }
+
+  // 块级元素解析：逐行状态机
+  function renderMarkdown(src = '') {
+    const lines = String(src).replace(/\r\n?/g, '\n').split('\n');
+    const out = [];
+    let i = 0;
+    let listType = null; // 'ul' | 'ol' | null，用于判断列表是否连续
+
+    const closeList = () => {
+      if (listType) {
+        out.push(`</${listType}>`);
+        listType = null;
+      }
+    };
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      // 围栏代码块 ``` 或 ~~~
+      const fenceMatch = line.match(/^\s*(```|~~~)(.*)$/);
+      if (fenceMatch) {
+        closeList();
+        const fence = fenceMatch[1];
+        const lang = fenceMatch[2].trim();
+        const codeLines = [];
+        i++;
+        // 一直读到同种围栏结束
+        while (i < lines.length && !lines[i].trim().startsWith(fence)) {
+          codeLines.push(lines[i]);
+          i++;
+        }
+        i++; // 跳过结束围栏
+        const cls = lang ? ` class="language-${escapeHtml(lang)}"` : '';
+        out.push(`<pre><code${cls}>${escapeHtml(codeLines.join('\n'))}</code></pre>`);
+        continue;
+      }
+
+      // 空行
+      if (line.trim() === '') {
+        closeList();
+        i++;
+        continue;
+      }
+
+      // 水平线 --- / *** / ___
+      if (/^\s*([-*_])(\s*\1){2,}\s*$/.test(line)) {
+        closeList();
+        out.push('<hr>');
+        i++;
+        continue;
+      }
+
+      // ATX 标题 # ~ ######
+      const heading = line.match(/^\s{0,3}(#{1,6})\s+(.*?)\s*#*\s*$/);
+      if (heading) {
+        closeList();
+        const level = heading[1].length;
+        out.push(`<h${level}>${inline(heading[2])}</h${level}>`);
+        i++;
+        continue;
+      }
+
+      // 引用：合并连续的 > 行，递归解析内部内容
+      if (/^\s{0,3}>/.test(line)) {
+        closeList();
+        const quoteLines = [];
+        while (i < lines.length && /^\s{0,3}>/.test(lines[i])) {
+          quoteLines.push(lines[i].replace(/^\s{0,3}>\s?/, ''));
+          i++;
+        }
+        out.push(`<blockquote>${renderMarkdown(quoteLines.join('\n'))}</blockquote>`);
+        continue;
+      }
+
+      // 无序列表 - * +
+      const ul = line.match(/^\s*[-*+]\s+(.*)$/);
+      if (ul) {
+        if (listType !== 'ul') {
+          closeList();
+          out.push('<ul>');
+          listType = 'ul';
+        }
+        out.push(`<li>${inline(ul[1])}</li>`);
+        i++;
+        continue;
+      }
+
+      // 有序列表 1. 1)
+      const ol = line.match(/^\s*\d+[.)]\s+(.*)$/);
+      if (ol) {
+        if (listType !== 'ol') {
+          closeList();
+          out.push('<ol>');
+          listType = 'ol';
+        }
+        out.push(`<li>${inline(ol[1])}</li>`);
+        i++;
+        continue;
+      }
+
+      // 普通段落：把连续的普通行合成一个 <p>，行与行之间用 <br>
+      closeList();
+      const para = [line];
+      i++;
+      while (i < lines.length) {
+        const next = lines[i];
+        // 遇到空行或任何块级语法就停止
+        if (next.trim() === '' ||
+            /^\s*(```|~~~|#{1,6}\s|>|[-*+]\s|\d+[.)]\s)/.test(next) ||
+            /^\s*([-*_])(\s*\1){2,}\s*$/.test(next)) {
+          break;
+        }
+        para.push(next);
+        i++;
+      }
+      // 每行单独解析再拼接，避免 <br> 被 escapeHtml 转义
+      out.push(`<p>${para.map(l => inline(l)).join('<br>')}</p>`);
+    }
+
+    closeList();
+    return out.join('\n');
+  }
+
+  /* ============================================================
+     1. 通用工具
+     ============================================================ */
+  const $  = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
+
+  function genId() {
+    return 'p-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7);
+  }
+
+  function todayString() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  let toastTimer = null;
+  function toast(msg) {
+    const el = $('#toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  /* ============================================================
+     2. 数据层
+     ============================================================ */
+
+  let posts = [];
+  let currentId = null;
+
+  async function loadPosts() {
+    try {
+      // 加 ?t=时间戳 防止浏览器缓存旧的 json
+      const res = await fetch('posts.json?t=' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        posts = data;
+      }
+    } catch (err) {
+      console.warn('读取 posts.json 失败：', err);
+      // 如果是直接双击打开的，会走到这里
+      toast('读取失败：请确保仓库有 posts.json，且通过 http 访问（不要直接双击 html）');
+      posts = [];
+    }
+  }
+
+  function sortedPosts() {
+    return [...posts].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+  }
+
+  /* ============================================================
+     3. 渲染层
+     ============================================================ */
+  function makeExcerpt(content = '', max = 110) {
+    const text = content
+      .replace(/```[\s\S]*?```/g, ' ')
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
+      .replace(/[#>*_`~\-]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    return text.length > max ? text.slice(0, max) + '…' : text;
+  }
+
+  function renderList() {
+    const listEl  = $('#postList');
+    const emptyEl = $('#emptyState');
+    listEl.innerHTML = '';
+
+    const items = sortedPosts();
+    if (items.length === 0) {
+      emptyEl.classList.remove('hidden');
+      return;
+    }
+    emptyEl.classList.add('hidden');
+
+    items.forEach(post => {
+      const card = document.createElement('article');
+      card.className = 'post-card';
+      card.innerHTML = `
+        <div class="post-meta">
+          <time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '未标注日期')}</time>
+          ${(post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+        <h3>${escapeHtml(post.title || '无标题')}</h3>
+        <p>${escapeHtml(makeExcerpt(post.content))}</p>
+        <div class="post-actions">
+          <button class="btn btn-small btn-primary" data-action="read" data-id="${escapeHtml(post.id)}">阅读</button>
+          <button class="btn btn-small btn-danger" data-action="delete" data-id="${escapeHtml(post.id)}">删除</button>
+        </div>
+      `;
+      listEl.appendChild(card);
+    });
+  }
+
+  function showView(name) {
+    ['list', 'read', 'add'].forEach(v => {
+      $('#view-' + v).classList.toggle('hidden', v !== name);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function openPost(id) {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    currentId = id;
+
+    $('#readTitle').textContent = post.title || '无标题';
+    $('#readMeta').innerHTML =
+      `<time datetime="${escapeHtml(post.date)}">${escapeHtml(post.date || '')}</time>` +
+      (post.tags || []).map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('');
+    // 使用内置渲染器，不依赖任何 CDN
+    $('#readContent').innerHTML = renderMarkdown(post.content || '');
+
+    showView('read');
+  }
+
+  function deletePost(id) {
+    const post = posts.find(p => p.id === id);
+    if (!post) return;
+    if (!confirm(`确定删除《${post.title || '无标题'}》吗？删除后无法恢复。`)) return;
+
+    posts = posts.filter(p => p.id !== id);
+    savePosts();
+    renderList();
+
+    if (currentId === id) {
+      currentId = null;
+      showView('list');
+    }
+    toast('已删除');
+  }
+
+  /* ============================================================
+     4. 添加文章
+     ============================================================ */
+  function extractTitle(text = '', filename = '') {
+    const m = text.match(/^\s*#\s+(.+?)\s*$/m);
+    if (m) return m[1].trim();
+    const base = (filename || '').replace(/^.*[\\/]/, '');
+    return base.replace(/\.(md|markdown|txt)$/i, '') || '未命名文章';
+  }
+
+  function addPost({ title, tags, content, filename }) {
+    const post = {
+      id: genId(),
+      title: title || extractTitle(content, filename),
+      date: todayString(),
+      tags: tags || [],
+      content: content || ''
+    };
+    posts.push(post);
+    return post;
+  }
+
+  function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(reader.error);
+      reader.readAsText(file, 'utf-8');
+    });
+  }
+
+  $('#fileInput').addEventListener('change', async (e) => {
+    const files = [...e.target.files];
+    if (files.length === 0) return;
+
+    let success = 0;
+    for (const file of files) {
+      try {
+        const text = await readFileAsText(file);
+        if (!text.trim()) {
+          toast(`《${file.name}》是空文件，已跳过`);
+          continue;
+        }
+        addPost({ content: text, filename: file.name });
+        success++;
+      } catch (err) {
+        console.error(err);
+        toast(`读取《${file.name}》失败`);
+      }
+    }
+
+    e.target.value = '';
+    if (success > 0) {
+      savePosts();
+      renderList();
+      showView('list');
+      toast(`已添加 ${success} 篇文章`);
+    }
+  });
+
+  $('#addForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const title   = $('#inputTitle').value.trim();
+    const tagsRaw = $('#inputTags').value.trim();
+    const content = $('#inputContent').value;
+
+    if (!content.trim()) {
+      toast('正文不能为空');
+      return;
+    }
+
+    const tags = tagsRaw ? tagsRaw.split(/[,，\s]+/).filter(Boolean) : [];
+
+    addPost({ title, tags, content });
+    savePosts();
+    renderList();
+    showView('list');
+    e.target.reset();
+    toast('已发布');
+  });
+
+  /* ============================================================
+     5. 导入 / 导出
+     ============================================================ */
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  $('#exportBtn').addEventListener('click', () => {
+    if (posts.length === 0) {
+      toast('没有文章可导出');
+      return;
+    }
+    const blob = new Blob([JSON.stringify(posts, null, 2)], {
+      type: 'application/json;charset=utf-8'
+    });
+    downloadBlob(blob, 'posts.json');
+    toast('已导出 posts.json');
+  });
+
+  $('#importBackup').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const text = await readFileAsText(file);
+      const data = JSON.parse(text);
+      if (!Array.isArray(data)) throw new Error('文件内容不是文章数组');
+
+      const map = new Map(posts.map(p => [p.id, p]));
+      let added = 0;
+      data.forEach(item => {
+        if (!item || typeof item !== 'object') return;
+        const post = {
+          id: item.id || genId(),
+          title: item.title || '无标题',
+          date: item.date || todayString(),
+          tags: Array.isArray(item.tags) ? item.tags : [],
+          content: item.content || ''
+        };
+        if (!map.has(post.id)) added++;
+        map.set(post.id, post);
+      });
+
+      posts = [...map.values()];
+      savePosts();
+      renderList();
+      toast(`导入完成：新增 ${added} 篇，共 ${posts.length} 篇`);
+    } catch (err) {
+      console.error(err);
+      toast('导入失败：' + err.message);
+    } finally {
+      e.target.value = '';
+    }
+  });
+
+  /* ============================================================
+     6. 从仓库同步
+     ============================================================ */
+  $('#navSync').addEventListener('click', async () => {
+    try {
+      const res = await fetch('posts.json', { cache: 'no-store' });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('posts.json 格式不正确');
+
+      const map = new Map(posts.map(p => [p.id, p]));
+      data.forEach(item => {
+        if (!item || typeof item !== 'object') return;
+        const id = item.id || genId();
+        map.set(id, {
+          id,
+          title: item.title || '无标题',
+          date: item.date || todayString(),
+          tags: Array.isArray(item.tags) ? item.tags : [],
+          content: item.content || ''
+        });
+      });
+
+      posts = [...map.values()];
+      savePosts();
+      renderList();
+      showView('list');
+      toast(`同步成功，从仓库读取 ${data.length} 篇文章`);
+    } catch (err) {
+      console.warn('同步失败：', err);
+      toast('同步失败：' + err.message + '（需通过 http 访问，且仓库根目录有 posts.json）');
+    }
+  });
+
+  /* ============================================================
+     7. 事件绑定
+     ============================================================ */
+  $('#postList').addEventListener('click', (e) => {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    const { action, id } = btn.dataset;
+    if (action === 'read')   openPost(id);
+    if (action === 'delete') deletePost(id);
+  });
+
+  $('#navHome').addEventListener('click', () => showView('list'));
+  $('#navList').addEventListener('click', () => showView('list'));
+  $('#navAdd').addEventListener('click',  () => {
+    showView('add');
+    $('#inputTitle').focus();
+  });
+  $('#emptyAddBtn').addEventListener('click', () => showView('add'));
+
+  $$('.js-back').forEach(btn => {
+    btn.addEventListener('click', () => showView('list'));
+  });
+
+  /* ============================================================
+     8. 主题切换
+     ============================================================ */
+  const root = document.documentElement;
+  const themeBtn = $('#themeToggle');
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+    themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  const savedTheme = localStorage.getItem('theme');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(savedTheme || (systemDark ? 'dark' : 'light'));
+
+  themeBtn.addEventListener('click', () => {
+    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+  });
+
+  /* ============================================================
+     9. 启动
+     ============================================================ */
+  $('#year').textContent = new Date().getFullYear();
+  loadPosts();
+  renderList();
+  showView('list');
+  </script>
 </body>
 </html>
