@@ -18,14 +18,14 @@
 
   // 行内元素解析
   function inline(text = '') {
-    // 1. 提取行内公式，替换为占位符保护起来
+    // 1. 提取行内公式，替换为占位符保护起来（去掉了下划线，防止被斜体语法误伤）
     const mathStore = [];
     let s = text.replace(/(?<!\$)\$([^\$\n]+)\$(?!\$)/g, (_, formula) => {
       if (typeof katex === 'undefined') return `$${formula}$`;
       try {
         const html = katex.renderToString(formula, { throwOnError: false });
         mathStore.push(html);
-        return `%%MATH_INLINE_${mathStore.length - 1}%%`;
+        return `%%MATHINLINE${mathStore.length - 1}%%`; // 这里改成了没有下划线的占位符
       } catch (e) {
         return `$${formula}$`;
       }
@@ -37,7 +37,7 @@
     // 3. 行内 Markdown 语法
     s = s.replace(/`([^`]+)`/g, (_, code) => `<code>${code}</code>`);
     
-    // 图片（兼容带空格的路径和 {align}）
+    // 图片
     s = s.replace(
       /!\[([^\]]*)\]\(([^)]+)\)(?:\{(left|center|right|float-left|float-right)\})?/g,
       (_, alt, url, align) => {
@@ -65,8 +65,8 @@
     s = s.replace(/(^|[^_])_([^_\n]+)_/g, '$1<em>$2</em>');
     s = s.replace(/~~([^~]+)~~/g, '<del>$1</del>');
 
-    // 4. 还原行内公式
-    s = s.replace(/%%MATH_INLINE_(\d+)%%/g, (_, index) => mathStore[index]);
+    // 4. 还原行内公式（去掉下划线匹配）
+    s = s.replace(/%%MATHINLINE(\d+)%%/g, (_, index) => mathStore[index]);
 
     return s;
   }
